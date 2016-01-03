@@ -9,8 +9,9 @@ var buildUrl = function(toSearchFor) {
   var urlPath = 'https://api.flickr.com/services/rest/?';
   var method = 'flickr.photos.search';
   var apiKey = '2aa08ff0cd754205c7d0a59f3ecda821';
-  var perPage = '3';
+  var perPage = '10';
 
+  //**is there a better way to do this?
   return urlPath + 'method=' + method + '&api_key=' + apiKey + '&text=' + toSearchFor + 
       '&per_page=' + perPage + '&format=json' + '&nojsoncallback=1';
 
@@ -25,13 +26,32 @@ var buildUrl = function(toSearchFor) {
 //   var urlbuilt =  'https://farm' + obj.farm + '.staticflickr.com/' + obj.server + '/' + obj.id + '_' + obj.secret + '_' + size + '.jpg';
 //   console.log(urlbuilt);
 // }
+var addThumbnailDivs = function() {
+  // var outerDiv = document.createElement('div');
+  // outerDiv.className = 'yes';
+  // document.getElementById("thumbnails").appendChild(outerDiv);
 
+  var innerDiv = document.createElement('div');
+  innerDiv.className = "col-xs-6 col-md-3";
+  document.getElementById("thumbnails").appendChild(innerDiv);
+
+  var aTag = document.createElement('a');
+  aTag.className = 'thumbnail';
+  innerDiv.appendChild(aTag);
+  
+  return aTag;
+
+}
 var addPhotos = function(photoObj){
   var size = 'q';
   for(var i = 0; i < photoObj.length; i++) {
+    var appendTo = addThumbnailDivs();
+    console.log('atag: '+ appendTo)
+
     var img = document.createElement("img");
     img.src = 'https://farm' + photoObj[i].farm + '.staticflickr.com/' + photoObj[i].server + '/' + photoObj[i].id + '_' + photoObj[i].secret +  '_' + size +'.jpg';
-    document.getElementById("thumbnails").appendChild(img);
+    img.alt = photoObj[i].title;
+    appendTo.appendChild(img);
   }
 }
 
