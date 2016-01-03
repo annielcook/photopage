@@ -2,7 +2,7 @@
 
 var jsonVar = {"firstName":"John", "lastName":"Doe"};
 
-var toSearchFor = 'kitten';
+var toSearchFor = 'cat';
 
 //build api search string - JSON
 var buildUrl = function(toSearchFor) {
@@ -16,21 +16,21 @@ var buildUrl = function(toSearchFor) {
 
 }
 
-var testImg = { "id": "24048668042", "owner": "48717444@N00", "secret": "115dd16bf4", "server": "1672", "farm": 2, "title": "Paint me like one of your French kittens.", "ispublic": 1, "isfriend": 0, "isfamily": 0 };
 
-//go through json object
-//for each photo, build image url and add src=url
-var buildImageUrl = function(obj) {
-
-  var urlbuilt =  'https://farm' + obj.farm + '.staticflickr.com/' + obj.server + '/' + obj.id + '_' + obj.secret + '.jpg';
-  console.log(urlbuilt);
-}
+// //go through json object
+// //for each photo, build image url and add src=url
+// var buildImageUrl = function(obj) {
+//   //150X150 square size photots
+//   var size = 's';
+//   var urlbuilt =  'https://farm' + obj.farm + '.staticflickr.com/' + obj.server + '/' + obj.id + '_' + obj.secret + '_' + size + '.jpg';
+//   console.log(urlbuilt);
+// }
 
 var addPhotos = function(photoObj){
-  console.log('length: ' + photoObj.length);
+  var size = 'q';
   for(var i = 0; i < photoObj.length; i++) {
     var img = document.createElement("img");
-    img.src = 'https://farm' + photoObj[i].farm + '.staticflickr.com/' + photoObj[i].server + '/' + photoObj[i].id + '_' + photoObj[i].secret + '.jpg';
+    img.src = 'https://farm' + photoObj[i].farm + '.staticflickr.com/' + photoObj[i].server + '/' + photoObj[i].id + '_' + photoObj[i].secret +  '_' + size +'.jpg';
     document.getElementById("thumbnails").appendChild(img);
   }
 }
@@ -61,5 +61,4 @@ var httpGet = function (theUrl){
 
 httpGet(buildUrl(toSearchFor));
 
-buildImageUrl(testImg);
 
