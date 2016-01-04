@@ -12,47 +12,17 @@
         <div class="page-header">
             <h1>Photo Page with Flickr API <small> Annie Cook</small></h1>
         </div>
-        <div id="thumbnails">
+        <div id="thumbnails"></div>
+
+        <div id="lightbox" class="lightbox" style="display:none" onclick="document.getElementById('lightbox').style.display='none';">
+           <table class="lightbox_table">
+                <tr>
+                    <td class="lightbox_table_cell" align="center">
+                         <div id="lightbox_content" style="border:5px solid black;"></div>
+                   </td>
+                </tr>
+           </table>
         </div>
-
-
-        <div id="lightbox" class="lightbox" style="display:none"
-
-      onclick="document.getElementById('lightbox').style.display='none';">
-
-
-
-   <table class="lightbox_table">
-
-   <tr>
-
-   <td class="lightbox_table_cell" align="center">
-
-      <div id="lightbox_content" style=
-
-            "width:300px; background-color:white; border:5px solid black;">
-
-
-
-         <p>Click anywhere to close the lightbox.</p>
-
-         <p>Use Javascript to insert anything here.</p>
-
-
-
-      </div>
-
-   </td>
-
-   </tr>
-
-   </table>
-
-
-
-</div>
-
-      </div>
     <script src="js/main.js"></script>
     </body>
 </html>

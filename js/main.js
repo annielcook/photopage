@@ -39,6 +39,15 @@ var buildImgUrl = function(photoObj, size) {
 }
 
 var openLightbox = function(bigUrl, arrOfPhotoObj, curr){
+  var insideBox = document.getElementById('lightbox_content');
+
+      var img = document.createElement('img');
+    //size q = 150x150 image
+    img.src = bigUrl;
+    // img.alt = photoObj[i].title;
+    console.log('here')
+
+  insideBox.appendChild(img);
   document.getElementById('lightbox').style.display='inline';
 
 
@@ -53,9 +62,25 @@ var addPhotos = function(photoObj){
     //size q = 150x150 image
     img.src = buildImgUrl(photoObj[i], 'q')
     img.alt = photoObj[i].title;
-    aTag.onclick = function() {
-      document.getElementById('lightbox').style.display='inline';
-    }
+
+
+    aTag.onclick = (function() {
+    
+          var currUrl = buildImgUrl(photoObj[i], 'z');
+          var curr = i;
+          var wholeObj = photoObj;
+          return function () {
+            openLightbox(currUrl, wholeObj, curr);
+          }
+        })()
+    // function() {
+    //   // var imgL = document.createElement('img');
+    //   // imgL.src = buildImgUrl(photoObj[i], 'o')
+    //   // imgL.alt = photoObj[i].title;
+
+
+    //   document.getElementById('lightbox').style.display='inline';
+    // }
 
 
     //size o is original size
