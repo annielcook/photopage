@@ -38,19 +38,24 @@ var buildImgUrl = function(photoObj, size) {
         '/' + photoObj.id + '_' + photoObj.secret +  '_' + size +'.jpg';
 }
 
-var openLightbox = function(bigUrl, arrOfPhotoObj, curr){
+var openLightbox = function(arrOfPhotoObj, curr){
   var insideBox = document.getElementById('lightbox_content');
 
-      var img = document.createElement('img');
-    //size q = 150x150 image
-    img.src = bigUrl;
-    // img.alt = photoObj[i].title;
-    console.log('here')
+  var img = document.createElement('img');
+  //size q = 150x150 image
+  img.src = buildImgUrl(arrOfPhotoObj[curr], 'z')
+  img.alt = arrOfPhotoObj[curr].title;
+  img.id = 'lightbox_image';
 
   insideBox.appendChild(img);
   document.getElementById('lightbox').style.display='inline';
+}
 
-
+var closeLightbox = function(){
+  //return function(){
+    document.getElementById('lightbox_content').removeChild(document.getElementById('lightbox_image'));
+    document.getElementById('lightbox').style.display='none';
+ // }
 }
 
 var addPhotos = function(photoObj){
@@ -63,29 +68,17 @@ var addPhotos = function(photoObj){
     img.src = buildImgUrl(photoObj[i], 'q')
     img.alt = photoObj[i].title;
 
-
     aTag.onclick = (function() {
-    
-          var currUrl = buildImgUrl(photoObj[i], 'z');
-          var curr = i;
-          var wholeObj = photoObj;
-          return function () {
-            openLightbox(currUrl, wholeObj, curr);
-          }
-        })()
-    // function() {
-    //   // var imgL = document.createElement('img');
-    //   // imgL.src = buildImgUrl(photoObj[i], 'o')
-    //   // imgL.alt = photoObj[i].title;
 
+      //var currUrl = buildImgUrl(photoObj[i], 'z');
+      var curr = i;
+      var wholeObj = photoObj;
+      return function () {
+        openLightbox(wholeObj, curr);
+      }
 
-    //   document.getElementById('lightbox').style.display='inline';
-    // }
+    })()
 
-
-    //size o is original size
-    //aTag.onclick = openLightbox(buildImgUrl(photoObj[i], 'o', photoObj, i));
-    // aTag.onclick = document.getElementById('lightbox').style.display='inline';
     aTag.appendChild(img);
   }
 }
