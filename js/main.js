@@ -1,15 +1,13 @@
 'use strict'
 
-var jsonVar = {"firstName":"John", "lastName":"Doe"};
-
-var toSearchFor = 'cat';
+var toSearchFor = 'kitten';
 
 //build api search string - JSON
 var buildUrl = function(toSearchFor) {
   var urlPath = 'https://api.flickr.com/services/rest/?';
   var method = 'flickr.photos.search';
   var apiKey = '2aa08ff0cd754205c7d0a59f3ecda821';
-  var perPage = '10';
+  var perPage = '32';
 
   //**is there a better way to do this?
   return urlPath + 'method=' + method + '&api_key=' + apiKey + '&text=' + toSearchFor + 
@@ -20,38 +18,50 @@ var buildUrl = function(toSearchFor) {
 
 // //go through json object
 // //for each photo, build image url and add src=url
-// var buildImageUrl = function(obj) {
-//   //150X150 square size photots
-//   var size = 's';
-//   var urlbuilt =  'https://farm' + obj.farm + '.staticflickr.com/' + obj.server + '/' + obj.id + '_' + obj.secret + '_' + size + '.jpg';
-//   console.log(urlbuilt);
-// }
-var addThumbnailDivs = function() {
-  // var outerDiv = document.createElement('div');
-  // outerDiv.className = 'yes';
-  // document.getElementById("thumbnails").appendChild(outerDiv);
+var addNestedDivs = function() {
 
   var innerDiv = document.createElement('div');
-  innerDiv.className = "col-xs-6 col-md-3";
-  document.getElementById("thumbnails").appendChild(innerDiv);
+  innerDiv.className = 'col-xs-6 col-md-3';
+  document.getElementById('thumbnails').appendChild(innerDiv);
 
   var aTag = document.createElement('a');
   aTag.className = 'thumbnail';
+  aTag.href='javascript:void(0)';
   innerDiv.appendChild(aTag);
   
   return aTag;
 
 }
-var addPhotos = function(photoObj){
-  var size = 'q';
-  for(var i = 0; i < photoObj.length; i++) {
-    var appendTo = addThumbnailDivs();
-    console.log('atag: '+ appendTo)
 
-    var img = document.createElement("img");
-    img.src = 'https://farm' + photoObj[i].farm + '.staticflickr.com/' + photoObj[i].server + '/' + photoObj[i].id + '_' + photoObj[i].secret +  '_' + size +'.jpg';
+var buildImgUrl = function(photoObj, size) {
+  return 'https://farm' + photoObj.farm + '.staticflickr.com/' + photoObj.server + 
+        '/' + photoObj.id + '_' + photoObj.secret +  '_' + size +'.jpg';
+}
+
+var openLightbox = function(bigUrl, arrOfPhotoObj, curr){
+  document.getElementById('lightbox').style.display='inline';
+
+
+}
+
+var addPhotos = function(photoObj){
+
+  for(var i = 0; i < photoObj.length; i++) {
+    var aTag = addNestedDivs();
+
+    var img = document.createElement('img');
+    //size q = 150x150 image
+    img.src = buildImgUrl(photoObj[i], 'q')
     img.alt = photoObj[i].title;
-    appendTo.appendChild(img);
+    aTag.onclick = function() {
+      document.getElementById('lightbox').style.display='inline';
+    }
+
+
+    //size o is original size
+    //aTag.onclick = openLightbox(buildImgUrl(photoObj[i], 'o', photoObj, i));
+    // aTag.onclick = document.getElementById('lightbox').style.display='inline';
+    aTag.appendChild(img);
   }
 }
 
@@ -66,9 +76,7 @@ var httpGet = function (theUrl){
       if (this.status >= 200 && this.status < 400) {
         //callback with JSON data
         var photos = JSON.parse(this.responseText);
-        console.log(JSON.stringify(photos.photos.photo));
         addPhotos(photos.photos.photo);
-        //document.getElementById('thumbnails').innerHTML = JSON.stringify(data, null, '  ');
 
       }
     }
