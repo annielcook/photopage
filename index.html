@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Creating your first app with Flickr API</title>
+        <title>Annie's Flickr Photo Page</title>
         <link rel="stylesheet" type="text/css" href="./css/normalize.css"/>
         <link rel="stylesheet" type="text/css" href="./css/style.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -18,7 +18,7 @@
            <table class="lightbox_table">
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-default" align="left" aria-label="Left Arrow">
+                        <button id="button-left" type="button" class="btn btn-default" align="left" aria-label="Left Arrow">
                             <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
                         </button>
                     </td>
@@ -26,7 +26,7 @@
                          <div id="lightbox_content" style="border:5px solid black;"></div>
                    </td>
                     <td>
-                        <button type="button" class="btn btn-default" align="right" aria-label="Right Arrow">
+                        <button id="button-right" type="button" class="btn btn-default" align="right" aria-label="Right Arrow">
                             <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
                         </button>
                     </td>

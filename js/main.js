@@ -38,7 +38,28 @@ var buildImgUrl = function(photoObj, size) {
         '/' + photoObj.id + '_' + photoObj.secret +  '_' + size +'.jpg';
 }
 
+var movePhoto = function(direction, arr, i){
+  // if(direction == 'left' && i == 0) alert('Beginning');
+  // else if(direction == 'right' && i == arr.length - 1) alert('End');
+  // else {
+  //   closeLightbox();
+  //   var j = direction === 'left' ? i-1 : i +1;
+  //   console.log("j: ", j)
+  //   openLightbox(arr, j);
+  //   console.log('made it')
+  // }
+  if(!(direction == 'left' && i == 0) && !(direction == 'right' && i == arr.length - 1)){
+    
+    closeLightbox();
+    var j = direction === 'left' ? i-1 : i +1;
+    console.log("j: ", j)
+    openLightbox(arr, j);
+    console.log('made it')
+  }
+}
+
 var openLightbox = function(arrOfPhotoObj, curr){
+  console.log("current: ", curr);
   var insideBox = document.getElementById('lightbox_content');
 
   var img = document.createElement('img');
@@ -46,6 +67,15 @@ var openLightbox = function(arrOfPhotoObj, curr){
   img.src = buildImgUrl(arrOfPhotoObj[curr], 'z')
   img.alt = arrOfPhotoObj[curr].title;
   img.id = 'lightbox_image';
+
+  document.getElementById('button-left').addEventListener('click', function(ev){
+    movePhoto('left', arrOfPhotoObj, curr);
+    ev.stopPropagation();
+  });
+  document.getElementById('button-right').addEventListener('click', function(ev){
+    movePhoto('right', arrOfPhotoObj, curr);
+    ev.stopPropagation()
+  });
 
   insideBox.appendChild(img);
   document.getElementById('lightbox').style.display='inline';
