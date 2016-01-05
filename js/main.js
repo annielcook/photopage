@@ -9,6 +9,7 @@ var perPage = '32';
 var format = 'json';
 var callback = '1';
 
+//image size definitions from Flickr API
 var imgSm = 'q';
 var imgMed = 'z';
 
@@ -22,10 +23,8 @@ var buildUrl = function (data){
 }
 
 
-// //go through json object
-// //for each photo, build image url and add src=url
+//add outer div for sizing then within add 'a' div
 var addNestedDivs = function() {
-
   var innerDiv = document.createElement('div');
   innerDiv.className = 'col-xs-6 col-md-3';
   document.getElementById('thumbnails').appendChild(innerDiv);
@@ -36,29 +35,29 @@ var addNestedDivs = function() {
   innerDiv.appendChild(aTag);
   
   return aTag;
-
 }
 
 
-//take in the phot and the size and return the constructed url
+//take in the photo object and the size and return the constructed url
 var buildImgUrl = function(selectedPhoto, size) {
   return buildUrl(['https://farm', selectedPhoto.farm, '.staticflickr.com/', selectedPhoto.server, 
     '/', selectedPhoto.id, '_', selectedPhoto.secret, '_', size, '.jpg']);
 }
 
+
+//called when arrow on lightbox clicked
 var movePhoto = function(direction, arr, i){
   //only move if not at the first or last photo
   if(!(direction == 'left' && i == 0) && !(direction == 'right' && i == arr.length - 1)){
     closeLightbox();
     var j = direction === 'left' ? i-1 : i +1;
-    console.log("j: ", j)
     openLightbox(arr, j);
-    console.log('made it')
   }
 }
 
+
+//open the lightbox image
 var openLightbox = function(arrOfPhotoObj, curr){
-  console.log("current: ", curr);
   var insideBox = document.getElementById('lightbox_content');
 
   var img = createImgElt(arrOfPhotoObj[curr], imgMed);
@@ -77,6 +76,7 @@ var openLightbox = function(arrOfPhotoObj, curr){
   document.getElementById('lightbox').style.display='inline';
 }
 
+
 var closeLightbox = function(){
     document.getElementById('lightbox_content').removeChild(document.getElementById('lightbox_image'));
     document.getElementById('lightbox').style.display='none';
@@ -89,7 +89,9 @@ var createImgElt = function(photo, size) {
   return img;
 }
 
+//called on page load and adds photos returned from API request
 var addPhotos = function(photoObj){
+  console.log(photoObj);
 
   for(var i = 0; i < photoObj.length; i++) {
     var aTag = addNestedDivs();
@@ -102,7 +104,7 @@ var addPhotos = function(photoObj){
       return function () {
         openLightbox(wholeObj, curr);
       }
-    })()
+    }())
 
     aTag.appendChild(img);
   }
@@ -115,15 +117,18 @@ var httpGet = function (theUrl){
   xhr.open('GET', theUrl, true);
 
   xhr.onreadystatechange = function() {
+    //4 means request finished and response is ready
     if (this.readyState === 4) {
+      //status that indicate no error
       if (this.status >= 200 && this.status < 400) {
         var photos = JSON.parse(this.responseText);
         //callback with JSON data
+        console.log("photos: ", phot);
         addPhotos(photos.photos.photo);
       }
     }
   };
-
+  //send the request
   xhr.send();
 }
 
