@@ -1,18 +1,24 @@
 'use strict'
 
+//initial api parameters on page load
 var toSearchFor = 'kitten';
+var urlPath = 'https://api.flickr.com/services/rest/?';
+var method = 'flickr.photos.search';
+var apiKey = '2aa08ff0cd754205c7d0a59f3ecda821';
+var perPage = '32';
+var format = 'json';
+var callback = '1';
 
-//build api search string - JSON
-var buildUrl = function(toSearchFor) {
-  var urlPath = 'https://api.flickr.com/services/rest/?';
-  var method = 'flickr.photos.search';
-  var apiKey = '2aa08ff0cd754205c7d0a59f3ecda821';
-  var perPage = '32';
+var imgSm = 'q';
+var imgMed = 'z';
 
-  //**is there a better way to do this?
-  return urlPath + 'method=' + method + '&api_key=' + apiKey + '&text=' + toSearchFor + 
-      '&per_page=' + perPage + '&format=json' + '&nojsoncallback=1';
 
+var buildUrl = function (data){
+  var ret = "";
+  for (var i = 0; i < data.length; i++){
+    ret+= data[i];
+  }
+  return ret;
 }
 
 
@@ -33,23 +39,16 @@ var addNestedDivs = function() {
 
 }
 
-var buildImgUrl = function(photoObj, size) {
-  return 'https://farm' + photoObj.farm + '.staticflickr.com/' + photoObj.server + 
-        '/' + photoObj.id + '_' + photoObj.secret +  '_' + size +'.jpg';
+
+//take in the phot and the size and return the constructed url
+var buildImgUrl = function(selectedPhoto, size) {
+  return buildUrl(['https://farm', selectedPhoto.farm, '.staticflickr.com/', selectedPhoto.server, 
+    '/', selectedPhoto.id, '_', selectedPhoto.secret, '_', size, '.jpg']);
 }
 
 var movePhoto = function(direction, arr, i){
-  // if(direction == 'left' && i == 0) alert('Beginning');
-  // else if(direction == 'right' && i == arr.length - 1) alert('End');
-  // else {
-  //   closeLightbox();
-  //   var j = direction === 'left' ? i-1 : i +1;
-  //   console.log("j: ", j)
-  //   openLightbox(arr, j);
-  //   console.log('made it')
-  // }
+  //only move if not at the first or last photo
   if(!(direction == 'left' && i == 0) && !(direction == 'right' && i == arr.length - 1)){
-    
     closeLightbox();
     var j = direction === 'left' ? i-1 : i +1;
     console.log("j: ", j)
@@ -63,8 +62,13 @@ var openLightbox = function(arrOfPhotoObj, curr){
   var insideBox = document.getElementById('lightbox_content');
 
   var img = document.createElement('img');
-  //size q = 150x150 image
-  img.src = buildImgUrl(arrOfPhotoObj[curr], 'z')
+
+  var thumbSize = imgMed;
+  // var selectedPhoto = arrOfPhotoObj[curr];
+
+  //es7 concatenation
+  img.src = buildImgUrl(arrOfPhotoObj[curr], thumbSize);//`https://farm${selectedPhoto.farm}.staticflickr.com/${selectedPhoto.server}/${selectedPhoto.id}_${selectedPhoto.secret}_${thumbSize}.jpg`;
+  console.log(img.src);
   img.alt = arrOfPhotoObj[curr].title;
   img.id = 'lightbox_image';
 
@@ -94,19 +98,17 @@ var addPhotos = function(photoObj){
     var aTag = addNestedDivs();
 
     var img = document.createElement('img');
-    //size q = 150x150 image
-    img.src = buildImgUrl(photoObj[i], 'q')
+    img.src = buildImgUrl(photoObj[i], imgSm)
     img.alt = photoObj[i].title;
 
-    aTag.onclick = (function() {
 
-      //var currUrl = buildImgUrl(photoObj[i], 'z');
+
+    aTag.onclick = (function() {
       var curr = i;
       var wholeObj = photoObj;
       return function () {
         openLightbox(wholeObj, curr);
       }
-
     })()
 
     aTag.appendChild(img);
@@ -116,25 +118,25 @@ var addPhotos = function(photoObj){
 //get request for url
 var httpGet = function (theUrl){
   var xhr = new XMLHttpRequest();
-  //3rd argument means async = true
+  //3rd argument means async == true
   xhr.open('GET', theUrl, true);
 
   xhr.onreadystatechange = function() {
     if (this.readyState === 4) {
       if (this.status >= 200 && this.status < 400) {
-        //callback with JSON data
         var photos = JSON.parse(this.responseText);
+        //callback with JSON data
         addPhotos(photos.photos.photo);
-
       }
     }
   };
 
   xhr.send();
-
-
 }
 
-httpGet(buildUrl(toSearchFor));
+var apiParams = [urlPath, 'method=', method, '&api_key=', apiKey, '&text=', toSearchFor, 
+'&per_page=', perPage, '&format=', format, '&nojsoncallback=', callback];
+
+httpGet(buildUrl(apiParams));
 
 
