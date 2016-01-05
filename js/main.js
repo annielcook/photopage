@@ -61,15 +61,12 @@ var openLightbox = function(arrOfPhotoObj, curr){
   console.log("current: ", curr);
   var insideBox = document.getElementById('lightbox_content');
 
-  var img = document.createElement('img');
+  // var img = document.createElement('img');
 
-  var thumbSize = imgMed;
-  // var selectedPhoto = arrOfPhotoObj[curr];
+  // img.src = buildImgUrl(arrOfPhotoObj[curr], imgMed);
 
-  //es7 concatenation
-  img.src = buildImgUrl(arrOfPhotoObj[curr], thumbSize);//`https://farm${selectedPhoto.farm}.staticflickr.com/${selectedPhoto.server}/${selectedPhoto.id}_${selectedPhoto.secret}_${thumbSize}.jpg`;
-  console.log(img.src);
-  img.alt = arrOfPhotoObj[curr].title;
+  // img.alt = arrOfPhotoObj[curr].title;
+  var img = createImgElt(arrOfPhotoObj[curr], imgMed);
   img.id = 'lightbox_image';
 
   document.getElementById('button-left').addEventListener('click', function(ev){
@@ -86,10 +83,15 @@ var openLightbox = function(arrOfPhotoObj, curr){
 }
 
 var closeLightbox = function(){
-  //return function(){
     document.getElementById('lightbox_content').removeChild(document.getElementById('lightbox_image'));
     document.getElementById('lightbox').style.display='none';
- // }
+}
+
+var createImgElt = function(photo, size) {
+  var img = document.createElement('img');
+  img.src = buildImgUrl(photo, size);
+  img.alt = photo.title;
+  return img;
 }
 
 var addPhotos = function(photoObj){
@@ -97,10 +99,11 @@ var addPhotos = function(photoObj){
   for(var i = 0; i < photoObj.length; i++) {
     var aTag = addNestedDivs();
 
-    var img = document.createElement('img');
-    img.src = buildImgUrl(photoObj[i], imgSm)
-    img.alt = photoObj[i].title;
+    // var img = document.createElement('img');
+    // img.src = buildImgUrl(photoObj[i], imgSm)
+    // img.alt = photoObj[i].title;
 
+    var img = createImgElt(photoObj[i], imgSm);
 
 
     aTag.onclick = (function() {
