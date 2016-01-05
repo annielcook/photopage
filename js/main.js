@@ -61,11 +61,6 @@ var openLightbox = function(arrOfPhotoObj, curr){
   console.log("current: ", curr);
   var insideBox = document.getElementById('lightbox_content');
 
-  // var img = document.createElement('img');
-
-  // img.src = buildImgUrl(arrOfPhotoObj[curr], imgMed);
-
-  // img.alt = arrOfPhotoObj[curr].title;
   var img = createImgElt(arrOfPhotoObj[curr], imgMed);
   img.id = 'lightbox_image';
 
@@ -99,12 +94,7 @@ var addPhotos = function(photoObj){
   for(var i = 0; i < photoObj.length; i++) {
     var aTag = addNestedDivs();
 
-    // var img = document.createElement('img');
-    // img.src = buildImgUrl(photoObj[i], imgSm)
-    // img.alt = photoObj[i].title;
-
     var img = createImgElt(photoObj[i], imgSm);
-
 
     aTag.onclick = (function() {
       var curr = i;
