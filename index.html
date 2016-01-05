@@ -12,9 +12,21 @@
         <div class="page-header">
             <h1>Photo Page with Flickr API <small> Annie Cook</small></h1>
         </div>
-        <div id="thumbnails"></div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <input id="search-field" type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="newSearch()">Search</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="thumbnails"></div>
+        </div>
 
-        <div id="lightbox" class="lightbox" style="display:none" onclick="closeLightbox()">
+        <div id="lightbox" class="lightbox" onclick="closeLightbox()">
            <table class="lightbox_table">
                 <tr>
                     <td>

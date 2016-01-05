@@ -1,17 +1,22 @@
 'use strict'
 
 //initial api parameters on page load
-var toSearchFor = 'kitten';
-var urlPath = 'https://api.flickr.com/services/rest/?';
-var method = 'flickr.photos.search';
-var apiKey = '2aa08ff0cd754205c7d0a59f3ecda821';
-var perPage = '32';
-var format = 'json';
-var callback = '1';
+var initialParams = {
+  toSearchFor: 'kitten',
+  urlPath:'https://api.flickr.com/services/rest/?',
+  method: 'flickr.photos.search',
+  apiKey: '2aa08ff0cd754205c7d0a59f3ecda821',
+  perPage: '32',
+  format: 'json',
+  callback: '1',
+}
 
 //image size definitions from Flickr API
 var imgSm = 'q';
 var imgMed = 'z';
+
+//location of the search param in the array I build url from
+var searchParamLocation = 6;
 
 
 var buildUrl = function (data){
@@ -89,13 +94,19 @@ var createImgElt = function(photo, size) {
   return img;
 }
 
+//remove photos when a new search is executed
+var removePhotos = function(){
+  var photos = document.getElementById("thumbnails");
+  while (photos.firstChild) {
+      photos.removeChild(photos.firstChild);
+  }
+}
+
 //called on page load and adds photos returned from API request
 var addPhotos = function(photoObj){
-  console.log(photoObj);
 
   for(var i = 0; i < photoObj.length; i++) {
     var aTag = addNestedDivs();
-
     var img = createImgElt(photoObj[i], imgSm);
 
     aTag.onclick = (function() {
@@ -112,6 +123,7 @@ var addPhotos = function(photoObj){
 
 //get request for url
 var httpGet = function (theUrl){
+
   var xhr = new XMLHttpRequest();
   //3rd argument means async == true
   xhr.open('GET', theUrl, true);
@@ -123,7 +135,6 @@ var httpGet = function (theUrl){
       if (this.status >= 200 && this.status < 400) {
         var photos = JSON.parse(this.responseText);
         //callback with JSON data
-        console.log("photos: ", phot);
         addPhotos(photos.photos.photo);
       }
     }
@@ -132,8 +143,14 @@ var httpGet = function (theUrl){
   xhr.send();
 }
 
-var apiParams = [urlPath, 'method=', method, '&api_key=', apiKey, '&text=', toSearchFor, 
-'&per_page=', perPage, '&format=', format, '&nojsoncallback=', callback];
+var newSearch = function(){
+  removePhotos();
+  apiParams[searchParamLocation] = document.getElementById('search-field').value;
+  httpGet(buildUrl(apiParams));
+}
+
+var apiParams = [initialParams.urlPath, 'method=', initialParams.method, '&api_key=', initialParams.apiKey, '&text=', initialParams.toSearchFor, 
+'&per_page=', initialParams.perPage, '&format=', initialParams.format, '&nojsoncallback=', initialParams.callback];
 
 httpGet(buildUrl(apiParams));
 
