@@ -5,7 +5,7 @@ var initialParams = {
   toSearchFor: 'kitten',
   urlPath:'https://api.flickr.com/services/rest/?',
   method: 'flickr.photos.search',
-  apiKey: '2aa08ff0cd754205c7d0a59f3ecda821',
+  apiKey: ***,
   perPage: '60',
   format: 'json',
   callback: '1',
