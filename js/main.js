@@ -6,7 +6,7 @@ var initialParams = {
   urlPath:'https://api.flickr.com/services/rest/?',
   method: 'flickr.photos.search',
   apiKey: '2aa08ff0cd754205c7d0a59f3ecda821',
-  perPage: '32',
+  perPage: '60',
   format: 'json',
   callback: '1',
 }
@@ -31,8 +31,8 @@ var buildUrl = function (data){
 //add outer div for sizing then within add 'a' div
 var addNestedDivs = function() {
   var innerDiv = document.createElement('div');
-  innerDiv.className = 'col-xs-6 col-md-3';
-  document.getElementById('thumbnails').appendChild(innerDiv);
+  innerDiv.className = 'col-xs-4 col-sm-3 col-md-2';
+  document.getElementById('js-thumbnails').appendChild(innerDiv);
 
   var aTag = document.createElement('a');
   aTag.className = 'thumbnail';
@@ -63,28 +63,30 @@ var movePhoto = function(direction, arr, i){
 
 //open the lightbox image
 var openLightbox = function(arrOfPhotoObj, curr){
-  var insideBox = document.getElementById('lightbox_content');
+  var insideBox = document.getElementById('js-lightbox-content');
 
   var img = createImgElt(arrOfPhotoObj[curr], imgMed);
-  img.id = 'lightbox_image';
+  img.id = 'js-lightbox-image';
 
-  document.getElementById('button-left').addEventListener('click', function(ev){
+  document.getElementById('js-lightbox-title').innerHTML = img.alt;
+  document.getElementById('js-button-left').addEventListener('click', function(ev){
     movePhoto('left', arrOfPhotoObj, curr);
     ev.stopPropagation();
   });
-  document.getElementById('button-right').addEventListener('click', function(ev){
+  document.getElementById('js-button-right').addEventListener('click', function(ev){
     movePhoto('right', arrOfPhotoObj, curr);
     ev.stopPropagation()
   });
 
   insideBox.appendChild(img);
-  document.getElementById('lightbox').style.display='inline';
+  document.getElementById('js-lightbox').style.display='inline';
+
 }
 
 
 var closeLightbox = function(){
-    document.getElementById('lightbox_content').removeChild(document.getElementById('lightbox_image'));
-    document.getElementById('lightbox').style.display='none';
+    document.getElementById('js-lightbox-content').removeChild(document.getElementById('js-lightbox-image'));
+    document.getElementById('js-lightbox').style.display='none';
 }
 
 var createImgElt = function(photo, size) {
@@ -96,7 +98,7 @@ var createImgElt = function(photo, size) {
 
 //remove photos when a new search is executed
 var removePhotos = function(){
-  var photos = document.getElementById("thumbnails");
+  var photos = document.getElementById("js-thumbnails");
   while (photos.firstChild) {
       photos.removeChild(photos.firstChild);
   }
@@ -143,15 +145,21 @@ var httpGet = function (theUrl){
   xhr.send();
 }
 
+//call when search button clicked
 var newSearch = function(){
-  removePhotos();
-  apiParams[searchParamLocation] = document.getElementById('search-field').value;
-  httpGet(buildUrl(apiParams));
+  var toSearch = document.getElementById('search-field').value;
+  if(toSearch.length > 0) {
+    removePhotos();
+    apiParams[searchParamLocation] = document.getElementById('search-field').value;
+    httpGet(buildUrl(apiParams));
+  }
 }
 
 var apiParams = [initialParams.urlPath, 'method=', initialParams.method, '&api_key=', initialParams.apiKey, '&text=', initialParams.toSearchFor, 
 '&per_page=', initialParams.perPage, '&format=', initialParams.format, '&nojsoncallback=', initialParams.callback];
 
+
+//initial function call
 httpGet(buildUrl(apiParams));
 
 
