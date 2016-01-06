@@ -4,7 +4,7 @@ using only native Javascript.
 
 ##Live at http://annielcook.github.io
 
-#3To Fork and Run
+##To Fork and Run
 Change *** in line 8 of main.js to your own Flickr API key
 
 
