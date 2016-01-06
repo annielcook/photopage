@@ -9,7 +9,7 @@ Change *** in line 8 of main.js to your own Flickr API key
 
 
 ##Challenges:
- - learnign the Flickr API
+ - learning the Flickr API
  - no external libraries - especially JQuery & Angular
  - knowing best protocol for small almost single page JavaScript sitess
 
